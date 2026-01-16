@@ -1,4 +1,3 @@
-//Just the basic setup, LOTS to do
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -22,7 +21,15 @@ int main(int argc, char **argv) {
             usage();
             return 1;
         }
-        //Need to work on index.h
+        Index *idx = index_create();
+        if (!idx) return 1;
+        index_scan_dir(idx, argv[2]);
+        if (index_write(idx, argv[3]) != 0) {
+            fprintf(stderr, "failed to write index\n");
+            index_free(idx);
+            return 1;
+        }
+        index_free(idx);
         return 0;
     }
 
