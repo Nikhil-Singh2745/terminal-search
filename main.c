@@ -38,7 +38,20 @@ int main(int argc, char **argv) {
             usage();
             return 1;
         }
-        //Need to work on search.h
+        Index *idx = index_read(argv[2]);
+        if (!idx) {
+            fprintf(stderr, "failed to read index\n");
+            return 1;
+        }
+        char *query = argv[3];
+        SearchResult *results = NULL;
+        int count = 0;
+        search_query(idx, query, &results, &count);
+        for (int i = 0; i < count; i++) {
+            printf("%d\t%s\n", results[i].score, results[i].path);
+        }
+        free(results);
+        index_free(idx);
         return 0;
     }
 
